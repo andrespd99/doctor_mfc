@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/* -------------------------- Applitacion env keys -------------------------- */
+const String kApplicationId = 'UVX7IXCOS1';
+const String kApiKey = '8314848f755b147ef47a60b462eb575a';
+
 /* --------------------------------- Colors --------------------------------- */
 
 const Color kFontWhite = Color(0xFFFFFFFF);
@@ -9,6 +13,7 @@ const Color kPrimaryColor = Color(0xFF438C73);
 const Color kSecondaryColor = Color(0xFF83BD41);
 const Color kSecondaryLightColor = Color(0xFF9AE04B);
 const Color kAccentColor = Color(0xFFEC5444);
+const Color kCardColor = Color(0xFF55917C);
 
 const RadialGradient kRadialPrimaryBg = RadialGradient(
   center: Alignment.topCenter,

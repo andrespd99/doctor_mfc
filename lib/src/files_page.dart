@@ -1,38 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_mfc/constants.dart';
-
+import 'package:doctor_mfc/models/attachment.dart';
+import 'package:doctor_mfc/models/enum/attachment_types.dart';
 import 'package:doctor_mfc/models/search_result.dart';
+import 'package:doctor_mfc/services/database.dart';
 import 'package:doctor_mfc/services/search_engine.dart';
-import 'package:doctor_mfc/src/device_selection_page.dart';
+import 'package:doctor_mfc/src/pdf_viewer_page.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:doctor_mfc/widgets/search_result_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-class StartPointPage extends StatefulWidget {
-  static final routeName = 'startPoint';
-
-  StartPointPage({Key? key}) : super(key: key);
-
-  @override
-  _StartPointPageState createState() => _StartPointPageState();
+enum FileType {
+  DOCUMENTATION,
+  GUIDE,
 }
 
-class _StartPointPageState extends State<StartPointPage> {
-  late SearchEngine searchEngine = new SearchEngine();
+/// FilesPage is a general Widget for both Documentation a Guides Page.
+class FilesPage extends StatefulWidget {
+  final FileType fileType;
 
-  final searchBarController = FloatingSearchBarController();
-  bool showClearButton = false;
-  bool loading = false;
-
-  List<SearchResult> results = [];
+  FilesPage(this.fileType, {Key? key}) : super(key: key);
 
   @override
-  void initState() {
-    super.initState();
-  }
+  _FilesPageState createState() => _FilesPageState();
+}
+
+class _FilesPageState extends State<FilesPage> {
+  late final String pageTitle =
+      widget.fileType == FileType.DOCUMENTATION ? 'Documentation' : 'Guides';
+
+  late SearchEngine searchEngine = new SearchEngine();
+  final searchBarController = FloatingSearchBarController();
+  List<SearchResult> results = [];
+
+  bool showClearButton = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +44,59 @@ class _StartPointPageState extends State<StartPointPage> {
       body: Stack(
         children: [
           PageTemplate(
-            title: 'Tell us your problem',
+            scrollable: true,
+            title: pageTitle,
             children: [
-              Spacer(),
-              TextButton(
-                onPressed: () {
-                  pushNewScreenWithRouteSettings(
-                    context,
-                    settings:
-                        RouteSettings(name: DeviceSelectionPage.routeName),
-                    screen: DeviceSelectionPage(),
-                    withNavBar: true,
-                  );
+              SizedBox(height: kDefaultPadding * 3),
+              StreamBuilder<QuerySnapshot<FileAttachment>>(
+                stream: widget.fileType == FileType.DOCUMENTATION
+                    ? Database().getAllDocumentationSnapshots()
+                    : Database().getAllGuidesSnapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<FileAttachment> files =
+                        snapshot.data!.docs.map((doc) => doc.data()).toList();
+
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: files.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, i) => GestureDetector(
+                        onTap: () => openFile(files[i]),
+                        child: Container(
+                          height: 85.0,
+                          padding: EdgeInsets.all(kDefaultPadding * 0.90),
+                          decoration: BoxDecoration(
+                            color: kCardColor,
+                            borderRadius:
+                                BorderRadius.circular(kDefaultBorderRadius),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(files[i].title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(color: kSecondaryLightColor)),
+                              Spacer(),
+                              Text(
+                                  '${files[i].systemBrand} ${files[i].systemDescription}'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      separatorBuilder: (context, i) =>
+                          SizedBox(height: kDefaultPadding),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                 },
-                child: Text('Advanced search'),
               ),
+              SizedBox(height: kDefaultPadding * 3),
             ],
           ),
           buildFloatingSearchBar(),
@@ -150,5 +192,14 @@ class _StartPointPageState extends State<StartPointPage> {
         );
       },
     );
+  }
+
+  void openFile(FileAttachment file) {
+    pushNewScreen(context,
+        screen: PDFViewerCachedFromUrl(
+          title: file.title,
+          url: file.fileUrl,
+        ),
+        withNavBar: false);
   }
 }

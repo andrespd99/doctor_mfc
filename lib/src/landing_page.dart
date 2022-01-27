@@ -1,8 +1,13 @@
 import 'package:doctor_mfc/constants.dart';
+import 'package:doctor_mfc/src/start_point.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
+import 'package:doctor_mfc/widgets/page_title.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class LandingPage extends StatefulWidget {
+  static final routeName = 'landingPage';
+
   const LandingPage({Key? key}) : super(key: key);
 
   @override
@@ -13,10 +18,14 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: 'Welcome to Doctor MFC',
-      leading: takeoffLogo(),
       showAppBar: false,
       children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: takeoffLogo(),
+        ),
+        SizedBox(height: kDefaultPadding * 3),
+        PageTitle('Welcome to Doctor MFC'),
         SizedBox(height: kDefaultPadding),
         description(),
         Spacer(),
@@ -24,7 +33,11 @@ class _LandingPageState extends State<LandingPage> {
         SizedBox(height: kDefaultPadding),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, 'startPoint');
+            pushNewScreenWithRouteSettings(
+              context,
+              settings: RouteSettings(name: StartPointPage.routeName),
+              screen: StartPointPage(),
+            );
           },
           child: Text('Start troubleshooting'),
           style: ElevatedButton.styleFrom(
