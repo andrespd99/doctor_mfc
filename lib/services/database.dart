@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_mfc/models/attachment.dart';
 import 'package:doctor_mfc/models/enum/attachment_types.dart';
+import 'package:doctor_mfc/models/request_form.dart';
 import 'package:doctor_mfc/models/system.dart';
 
 class Database {
@@ -37,6 +38,26 @@ class Database {
     return types;
   }
 
+  Future<List<System>> getAllSystems() async {
+    return _systemsRef.get().then((snapshot) {
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    });
+  }
+
+  Stream<QuerySnapshot<System>> getAllSystemsSnapshots() {
+    return _systemsRef.snapshots();
+  }
+
+  Future<System?> getSystemById(String id) async {
+    return _systemsRef.doc(id).get().then((snapshot) {
+      return snapshot.data();
+    });
+  }
+
+  Stream<DocumentSnapshot<System?>> getSystemByIdSnapshot(String id) {
+    return _systemsRef.doc(id).snapshots();
+  }
+
   Future<List<System>> getSystemsByType(String type) async {
     return _systemsRef
         .where('type', isEqualTo: type)
@@ -59,10 +80,17 @@ class Database {
 
   Stream<QuerySnapshot<FileAttachment>> getAllDocumentationSnapshots() =>
       _fileRef
-          .where('type', isEqualTo: typeToCodeMap[AttachmentType.DOCUMENTATION])
+          .where('type',
+              isEqualTo:
+                  AttachmentTypeConverter.toCode(AttachmentType.DOCUMENTATION))
           .snapshots();
 
   Stream<QuerySnapshot<FileAttachment>> getAllGuidesSnapshots() => _fileRef
-      .where('type', isEqualTo: typeToCodeMap[AttachmentType.GUIDE])
+      .where('type',
+          isEqualTo: AttachmentTypeConverter.toCode(AttachmentType.GUIDE))
       .snapshots();
+
+  Future addRequest(RequestForm form) async {
+    return await _db.collection('requests').add(form.toMap());
+  }
 }

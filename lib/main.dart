@@ -1,17 +1,19 @@
+import 'package:doctor_mfc/auth_page.dart';
 import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/models/search_result.dart';
+import 'package:doctor_mfc/services/mfc_auth_service.dart';
 
 import 'package:doctor_mfc/src/device_selection_page.dart';
-import 'package:doctor_mfc/src/device_selection_page.dart';
-import 'package:doctor_mfc/src/index_navigation_page.dart';
 import 'package:doctor_mfc/src/landing_page.dart';
 import 'package:doctor_mfc/src/login_page.dart';
+import 'package:doctor_mfc/src/request_changes_page.dart';
 
 import 'package:doctor_mfc/src/solutions_page.dart';
 import 'package:doctor_mfc/src/start_point.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,45 +26,50 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: theme(),
-      home: Material(
-        child: IndexNavigationPage(),
-      ),
-      builder: (context, widget) => Material(child: widget),
-      routes: {
-        LogInPage.routeName: (context) => LogInPage(),
-        LandingPage.routeName: (context) => LandingPage(),
-        StartPointPage.routeName: (context) => StartPointPage(),
-        DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
-        DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
-        SearchResult.routeName: (context) {
-          SearchResult result =
-              ModalRoute.of(context)!.settings.arguments as SearchResult;
+    return MultiProvider(
+      providers: [
+        Provider<MFCAuthService>(create: (context) => MFCAuthService()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: theme(),
+        home: Material(
+          child: AuthPage(),
+        ),
+        builder: (context, widget) => Material(child: widget),
+        routes: {
+          LoginPage.routeName: (context) => LoginPage(),
+          LandingPage.routeName: (context) => LandingPage(),
+          StartPointPage.routeName: (context) => StartPointPage(),
+          DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
+          DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
+          SearchResult.routeName: (context) {
+            SearchResult result =
+                ModalRoute.of(context)!.settings.arguments as SearchResult;
 
-          late Widget widget;
+            late Widget widget;
 
-          if (result is ProblemSearchResult) {
-            widget = SolutionsPage(result.problem);
-          } else if (result is DocumentationSearchResult) {
-            // TODO: Add documentation view.
-            // widget = DocumentationSearchResultPage(
-            //     problem: (result as DocumentationSearchResult).problem);
-          } else if (result is GuideSearchResult) {
-            // TODO: Add guide view.
-            // widget = SolutionsPage(
-            //   problemDescription: result.problemDescription,
-            //   solutions: result.solutions,
-            // );
-          } else {
-            widget = Container(
-              child: Center(child: Text('Unknown result')),
-            );
+            if (result is ProblemSearchResult) {
+              widget = SolutionsPage(result.problem);
+            } else if (result is DocumentationSearchResult) {
+              // TODO: Add documentation view.
+              // widget = DocumentationSearchResultPage(
+              //     problem: (result as DocumentationSearchResult).problem);
+            } else if (result is GuideSearchResult) {
+              // TODO: Add guide view.
+              // widget = SolutionsPage(
+              //   problemDescription: result.problemDescription,
+              //   solutions: result.solutions,
+              // );
+            } else {
+              widget = Container(
+                child: Center(child: Text('Unknown result')),
+              );
+            }
+            return widget;
           }
-          return widget;
-        }
-      },
+        },
+      ),
     );
   }
 

@@ -4,7 +4,7 @@ import 'package:doctor_mfc/models/system.dart';
 import 'package:doctor_mfc/services/database.dart';
 import 'package:doctor_mfc/src/device_documentation_page.dart';
 import 'package:doctor_mfc/src/solutions_page.dart';
-import 'package:doctor_mfc/widgets/bullet.dart';
+import 'package:doctor_mfc/widgets/custom_bullet.dart';
 import 'package:doctor_mfc/widgets/custom_list_tile.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';

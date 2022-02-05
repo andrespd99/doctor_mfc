@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 class IndexNavigationPage extends StatefulWidget {
+  static final routeName = 'indexNavigationPage';
   IndexNavigationPage({Key? key}) : super(key: key);
 
   @override

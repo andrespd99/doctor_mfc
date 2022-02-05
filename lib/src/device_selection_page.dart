@@ -3,6 +3,7 @@ import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/models/device_type.dart';
 import 'package:doctor_mfc/models/system.dart';
 import 'package:doctor_mfc/services/database.dart';
+import 'package:doctor_mfc/src/request_changes_page.dart';
 import 'package:doctor_mfc/src/start_point.dart';
 import 'package:doctor_mfc/src/systems_problems_list_page.dart';
 
@@ -106,14 +107,19 @@ class _DeviceSelectionPageState extends State<DeviceSelectionPage> {
   Center requestAdditionButton() {
     return Center(
       child: TextButton(
-        onPressed: () {},
         child: Text('Request addition'),
+        onPressed: () => pushNewScreen(
+          context,
+          screen: RequestChangePage(),
+          withNavBar: false,
+        ),
       ),
     );
   }
 
-  Center cantFindDeviceText() =>
-      Center(child: Text("Can't find the device you are looking for?"));
+  Center cantFindDeviceText() => Center(
+        child: Text("Can't find the device you are looking for?"),
+      );
 
   Widget deviceTypeSelector(String deviceName) {
     return Column(

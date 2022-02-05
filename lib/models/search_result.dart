@@ -3,16 +3,44 @@ import 'package:doctor_mfc/models/problem.dart';
 import 'package:doctor_mfc/models/solution.dart';
 import 'package:doctor_mfc/models/system.dart';
 
-enum EntityType {
+enum SearchEntityType {
   PROBLEM_SEARCH_RESULT,
   DOCUMENTATION_SEARCH_RESULT,
   GUIDE_SEARCH_RESULT,
 }
 
+class SearchEntityTypeConverter {
+  static String toCode(SearchEntityType type) {
+    switch (type) {
+      case SearchEntityType.PROBLEM_SEARCH_RESULT:
+        return '001';
+      case SearchEntityType.DOCUMENTATION_SEARCH_RESULT:
+        return '002';
+      case SearchEntityType.GUIDE_SEARCH_RESULT:
+        return '003';
+      default:
+        throw Exception('Unknown SearchEntityType: ${type.toString()}');
+    }
+  }
+
+  static SearchEntityType fromCode(String code) {
+    switch (code) {
+      case '001':
+        return SearchEntityType.PROBLEM_SEARCH_RESULT;
+      case '002':
+        return SearchEntityType.DOCUMENTATION_SEARCH_RESULT;
+      case '003':
+        return SearchEntityType.GUIDE_SEARCH_RESULT;
+      default:
+        throw Exception('Unknown search entity code: $code');
+    }
+  }
+}
+
 abstract class SearchResult {
   static final routeName = 'searchResult';
 
-  final EntityType entityType;
+  final SearchEntityType entityType;
   final String description;
 
   SearchResult({required this.entityType, required this.description});
@@ -48,7 +76,7 @@ class ProblemSearchResult extends SearchResult {
     required this.systemBrand,
     required this.problem,
   }) : super(
-          entityType: EntityType.PROBLEM_SEARCH_RESULT,
+          entityType: SearchEntityType.PROBLEM_SEARCH_RESULT,
           description: problem.description,
         );
 
@@ -67,7 +95,7 @@ class DocumentationSearchResult extends SearchResult {
 
   DocumentationSearchResult(this.attachment)
       : super(
-          entityType: EntityType.DOCUMENTATION_SEARCH_RESULT,
+          entityType: SearchEntityType.DOCUMENTATION_SEARCH_RESULT,
           description: attachment.title,
         );
 
@@ -82,7 +110,7 @@ class GuideSearchResult extends SearchResult {
 
   GuideSearchResult(this.attachment)
       : super(
-          entityType: EntityType.GUIDE_SEARCH_RESULT,
+          entityType: SearchEntityType.GUIDE_SEARCH_RESULT,
           description: attachment.title,
         );
 

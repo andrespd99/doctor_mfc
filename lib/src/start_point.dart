@@ -3,6 +3,8 @@ import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/models/search_result.dart';
 import 'package:doctor_mfc/services/search_engine.dart';
 import 'package:doctor_mfc/src/device_selection_page.dart';
+import 'package:doctor_mfc/src/request_changes_page.dart';
+import 'package:doctor_mfc/widgets/custom_solution_result_card.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:doctor_mfc/widgets/search_result_container.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ class _StartPointPageState extends State<StartPointPage> {
   final searchBarController = FloatingSearchBarController();
   bool showClearButton = false;
   bool loading = false;
+
+  String? query;
 
   List<SearchResult> results = [];
 
@@ -90,6 +94,7 @@ class _StartPointPageState extends State<StartPointPage> {
       width: isPortrait ? 600 : 500,
       debounceDelay: Duration(milliseconds: 250),
       onQueryChanged: (query) {
+        this.query = query;
         if (query.isNotEmpty) {
           setState(() {
             loading = true;
@@ -139,13 +144,51 @@ class _StartPointPageState extends State<StartPointPage> {
       ],
       builder: (context, transition) {
         return ClipRRect(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: results.length,
-            itemBuilder: (context, i) => SearchResultContainer(results[i]),
-            separatorBuilder: (context, i) =>
-                SizedBox(height: kDefaultPadding / 2),
+          child: Column(
+            children: [
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemCount: results.length,
+                itemBuilder: (context, i) => SearchResultContainer(results[i]),
+                separatorBuilder: (context, i) =>
+                    SizedBox(height: kDefaultPadding / 2),
+              ),
+              SizedBox(height: kDefaultPadding),
+              if (!loading && query != null && query!.isNotEmpty)
+                Container(
+                    padding: EdgeInsets.all(kDefaultPadding),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+                      color: Colors.white38,
+                    ),
+                    child: Column(
+                      children: [
+                        Text("Can't find what you're looking for?"),
+                        TextButton(
+                            child: Text('Advanced Search'),
+                            onPressed: () {
+                              searchBarController.close();
+                              pushNewScreen(
+                                context,
+                                screen: DeviceSelectionPage(),
+                                withNavBar: false,
+                              );
+                            }),
+                        TextButton(
+                          child: Text('Request an addition'),
+                          onPressed: () {
+                            searchBarController.close();
+                            pushNewScreen(
+                              context,
+                              screen: RequestChangePage(),
+                              withNavBar: false,
+                            );
+                          },
+                        ),
+                      ],
+                    )),
+            ],
           ),
         );
       },

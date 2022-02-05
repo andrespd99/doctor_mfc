@@ -1,5 +1,5 @@
 import 'package:doctor_mfc/constants.dart';
-import 'package:doctor_mfc/widgets/bullet.dart';
+import 'package:doctor_mfc/widgets/custom_bullet.dart';
 import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {

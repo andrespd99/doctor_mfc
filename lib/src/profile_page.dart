@@ -1,6 +1,11 @@
 import 'package:doctor_mfc/constants.dart';
+import 'package:doctor_mfc/services/mfc_auth_service.dart';
+import 'package:doctor_mfc/src/request_changes_page.dart';
+import 'package:doctor_mfc/widgets/future_loading_indicator.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -22,15 +27,19 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Text('Create ticket'),
         ),
         TextButton(
-          onPressed: () {},
           child: Text('Request to add information'),
+          onPressed: () => pushNewScreen(
+            context,
+            screen: RequestChangePage(),
+            withNavBar: false,
+          ),
         ),
         TextButton(
           onPressed: () {},
           child: Text('Help'),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () => onSignOutPressed(),
           child: Text('Sign out'),
           style: TextButton.styleFrom(
             primary: Colors.red,
@@ -41,52 +50,30 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Container userCard() {
-    return Container(
-      width: 300.0,
-      height: 112.0,
-      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-      decoration: BoxDecoration(
-        color: kCardColor,
-        borderRadius: BorderRadius.circular(kDefaultBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, 4.0),
-            blurRadius: 10.0,
-            color: Colors.black26,
+  Future<void> onSignOutPressed() {
+    return futureLoadingIndicator(
+      context,
+      Provider.of<MFCAuthService>(context, listen: false).signOut(),
+    );
+  }
+
+  Widget userCard() {
+    String email =
+        Provider.of<MFCAuthService>(context, listen: false).user!.email!;
+    return Column(
+      children: [
+        InkWell(
+          child: CircleAvatar(
+            radius: 70.0,
+            backgroundImage: AssetImage('assets/images/doctor.jpg'),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 40.0,
-            backgroundImage: AssetImage('assets/images/doctor.png'),
-          ),
-          SizedBox(width: kDefaultPadding / 2),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'email@takeoff.com',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Row(
-                  children: [
-                    Icon(Icons.edit),
-                    SizedBox(width: kDefaultPadding / 5),
-                    Text('Edit'),
-                  ],
-                ),
-                style: TextButton.styleFrom(primary: Colors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
+          onTap: () {},
+        ),
+        SizedBox(height: kDefaultPadding),
+        Text('Andres Pacheco', style: Theme.of(context).textTheme.headline4),
+        SizedBox(height: kDefaultPadding / 3),
+        Text('$email'),
+      ],
     );
   }
 }

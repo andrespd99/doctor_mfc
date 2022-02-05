@@ -4,20 +4,22 @@ import 'package:doctor_mfc/models/enum/attachment_types.dart';
 import 'package:doctor_mfc/models/problem.dart';
 import 'package:doctor_mfc/models/solution.dart';
 import 'package:doctor_mfc/src/pdf_viewer_page.dart';
+import 'package:doctor_mfc/src/request_changes_page.dart';
+import 'package:doctor_mfc/src/start_point.dart';
 import 'package:doctor_mfc/src/systems_problems_list_page.dart';
-import 'package:doctor_mfc/widgets/bullet.dart';
+import 'package:doctor_mfc/widgets/custom_bullet.dart';
 import 'package:doctor_mfc/widgets/custom_solution_result_card.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SolutionsPage extends StatefulWidget {
   final Problem problem;
-  static final routeName = 'solutions';
+  static final routeName = 'solutionsPage';
 
   SolutionsPage(this.problem, {Key? key}) : super(key: key);
 
@@ -319,7 +321,17 @@ class _SolutionsPageState extends State<SolutionsPage> {
         SizedBox(height: kDefaultPadding),
         TextButton(
           child: Text('Create ticket'),
-          onPressed: () {},
+          style: TextButton.styleFrom(
+            primary: kSecondaryColor,
+          ),
+          onPressed: () {
+            goBackToStartPoint();
+            pushNewScreen(
+              context,
+              screen: RequestChangePage(),
+              withNavBar: false,
+            );
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -354,6 +366,9 @@ class _SolutionsPageState extends State<SolutionsPage> {
         TextButton(
           child: Text('Go back to main page'),
           onPressed: () => goBackToStartPoint(),
+          style: TextButton.styleFrom(
+            primary: kSecondaryColor,
+          ),
         ),
       ],
     );
@@ -399,8 +414,7 @@ class _SolutionsPageState extends State<SolutionsPage> {
       );
   }
 
-  void goBackToStartPoint() =>
-      Navigator.of(context, rootNavigator: true).popUntil((route) {
-        return route.settings.name == SystemsProblemsListPage.routeName;
+  void goBackToStartPoint() => Navigator.of(context).popUntil((route) {
+        return route.settings.name == StartPointPage.routeName;
       });
 }

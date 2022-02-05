@@ -1,13 +1,29 @@
 enum AttachmentType { DOCUMENTATION, GUIDE, LINK }
 
-Map<String, AttachmentType> codeToTypeMap = {
-  '001': AttachmentType.DOCUMENTATION,
-  '002': AttachmentType.GUIDE,
-  '003': AttachmentType.LINK,
-};
+class AttachmentTypeConverter {
+  static toCode(AttachmentType type) {
+    switch (type) {
+      case AttachmentType.DOCUMENTATION:
+        return '001';
+      case AttachmentType.GUIDE:
+        return '002';
+      case AttachmentType.LINK:
+        return '003';
+      default:
+        throw new Exception('Unknown AttachmentType: ${type.toString()}');
+    }
+  }
 
-Map<AttachmentType, String> typeToCodeMap = {
-  AttachmentType.DOCUMENTATION: '001',
-  AttachmentType.GUIDE: '002',
-  AttachmentType.LINK: '003',
-};
+  static fromCode(String code) {
+    switch (code) {
+      case '001':
+        return AttachmentType.DOCUMENTATION;
+      case '002':
+        return AttachmentType.GUIDE;
+      case '003':
+        return AttachmentType.LINK;
+      default:
+        throw new Exception('Unknown AttachmentType code: $code');
+    }
+  }
+}

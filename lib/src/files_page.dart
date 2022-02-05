@@ -3,6 +3,7 @@ import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/models/attachment.dart';
 import 'package:doctor_mfc/models/enum/attachment_types.dart';
 import 'package:doctor_mfc/models/search_result.dart';
+import 'package:doctor_mfc/models/system.dart';
 import 'package:doctor_mfc/services/database.dart';
 import 'package:doctor_mfc/services/search_engine.dart';
 import 'package:doctor_mfc/src/pdf_viewer_page.dart';
@@ -38,6 +39,18 @@ class _FilesPageState extends State<FilesPage> {
   bool showClearButton = false;
   bool loading = false;
 
+  late SearchEntityType searchEntityType;
+
+  @override
+  void initState() {
+    if (widget.fileType == FileType.DOCUMENTATION) {
+      searchEntityType = SearchEntityType.DOCUMENTATION_SEARCH_RESULT;
+    } else {
+      searchEntityType = SearchEntityType.GUIDE_SEARCH_RESULT;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,31 +74,26 @@ class _FilesPageState extends State<FilesPage> {
                       shrinkWrap: true,
                       itemCount: files.length,
                       physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, i) => GestureDetector(
-                        onTap: () => openFile(files[i]),
-                        child: Container(
-                          height: 85.0,
-                          padding: EdgeInsets.all(kDefaultPadding * 0.90),
-                          decoration: BoxDecoration(
-                            color: kCardColor,
-                            borderRadius:
-                                BorderRadius.circular(kDefaultBorderRadius),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(files[i].title,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      ?.copyWith(color: kSecondaryLightColor)),
-                              Spacer(),
-                              Text(
-                                  '${files[i].systemBrand} ${files[i].systemDescription}'),
-                            ],
-                          ),
-                        ),
-                      ),
+                      itemBuilder: (context, i) {
+                        if (widget.fileType == FileType.DOCUMENTATION)
+                          return StreamBuilder<DocumentSnapshot<System?>>(
+                            stream: Database()
+                                .getSystemByIdSnapshot(files[i].systemId!),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                System system = snapshot.data!.data()!;
+                                return fileCard(
+                                  file: files[i],
+                                  body: Text(
+                                      '${system.brand} ${system.description}'),
+                                );
+                              } else
+                                return Container();
+                            },
+                          );
+                        else
+                          return fileCard(file: files[i]);
+                      },
                       separatorBuilder: (context, i) =>
                           SizedBox(height: kDefaultPadding),
                     );
@@ -101,6 +109,32 @@ class _FilesPageState extends State<FilesPage> {
           ),
           buildFloatingSearchBar(),
         ],
+      ),
+    );
+  }
+
+  Widget fileCard({required FileAttachment file, Widget? body}) {
+    return GestureDetector(
+      onTap: () => openFile(file),
+      child: Container(
+        height: 85.0,
+        padding: EdgeInsets.all(kDefaultPadding * 0.90),
+        decoration: BoxDecoration(
+          color: kCardColor,
+          borderRadius: BorderRadius.circular(kDefaultBorderRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(file.title,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.copyWith(color: kSecondaryLightColor)),
+            Spacer(),
+            if (body != null) body,
+          ],
+        ),
       ),
     );
   }
@@ -144,7 +178,10 @@ class _FilesPageState extends State<FilesPage> {
           });
         }
         searchEngine
-            .searchProblem(query)
+            .searchWithEntityTypeFacetFilter(
+              query,
+              searchEntityType,
+            )
             .then(
               (results) => setState(
                 () {

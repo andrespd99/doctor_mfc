@@ -10,7 +10,7 @@ abstract class Attachment {
   });
 
   factory Attachment.fromMap(Map<String, dynamic> data) {
-    if (codeToTypeMap[data['type']] == AttachmentType.LINK) {
+    if (AttachmentTypeConverter.fromCode(data['type']) == AttachmentType.LINK) {
       return LinkAttachment(
         title: data['title'],
         url: data['url'],
@@ -54,7 +54,7 @@ class FileAttachment extends Attachment {
       systemId: data['systemId'],
       systemBrand: data['systemBrand'],
       systemDescription: data['systemDescription'],
-      type: codeToTypeMap[data['type'] as String]!,
+      type: AttachmentTypeConverter.fromCode(data['type'] as String)!,
       title: data['title'],
       fileUrl: data['fileUrl'],
       fileName: data['fileName'],
@@ -66,7 +66,7 @@ class FileAttachment extends Attachment {
     return {
       'id': id,
       if (type == AttachmentType.DOCUMENTATION) 'systemId': systemId,
-      'type': typeToCodeMap[type],
+      'type': AttachmentTypeConverter.toCode(type),
       'title': title,
       'fileName': fileName,
       'fileSize': fileSize,
@@ -93,7 +93,7 @@ class LinkAttachment extends Attachment {
     return {
       'title': title,
       'url': url,
-      'type': typeToCodeMap[type],
+      'type': AttachmentTypeConverter.toCode(type),
     };
   }
 }
