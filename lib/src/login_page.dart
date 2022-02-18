@@ -1,12 +1,13 @@
 import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/services/mfc_auth_service.dart';
-import 'package:doctor_mfc/src/index_navigation_page.dart';
+
 import 'package:doctor_mfc/widgets/custom_progress_indicator.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Login page for the MFC app.
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -23,10 +24,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  /// Used to disable the login button while the app is waiting for the response.
   bool isLoading = false;
 
+  /// Error message returned when the login fails.
   String? errorMessage;
 
+  /// Used to display the error message if the login fails.
   bool get hasError => errorMessage != null;
 
   @override
@@ -114,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       SizedBox(height: kDefaultPadding * 0.4),
       TextField(
+        enabled: !isLoading,
         controller: emailController,
       ),
     ];
@@ -130,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       SizedBox(height: kDefaultPadding * 0.4),
       TextField(
+        enabled: !isLoading,
         controller: passwordController,
         obscureText: true,
       ),

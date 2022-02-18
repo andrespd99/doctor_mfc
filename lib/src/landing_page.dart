@@ -5,6 +5,7 @@ import 'package:doctor_mfc/widgets/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// Landing page. This is the first page the user will see when they open the app.
 class LandingPage extends StatefulWidget {
   static final routeName = 'landingPage';
 

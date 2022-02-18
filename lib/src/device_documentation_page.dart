@@ -7,6 +7,11 @@ import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// Page that displays the existing documentation for the given `system`.
+///
+/// The `documentationList` is a list of [FileAttachment] objects that
+/// should be linked to this system. Use the [Database().getDocumentationBySystemId(system.id)]
+/// to retrieve them.
 class DeviceDocumentationPage extends StatefulWidget {
   static final routeName = 'deviceDocumentation';
   final System system;

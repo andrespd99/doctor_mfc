@@ -7,6 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// This is the page where the authentication layer rest upon.
+///
+/// It is the first page that the user sees when they open the app. It is
+/// responsible for checking if the user is logged in or not.
+///
+/// If the user is logged in, it will redirect them to the index page. If the
+/// user is not logged in, it will redirect them to the login page.
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
@@ -21,27 +28,7 @@ class _AuthPageState extends State<AuthPage> {
       stream: Provider.of<MFCAuthService>(context).userStream(),
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.none) {
-          return PageTemplate(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/no-connection-white.png',
-                      height: 75,
-                    ),
-                    SizedBox(height: kDefaultPadding * 2),
-                    Text('No connection.'),
-                    TextButton(
-                      onPressed: () => setState(() {}),
-                      child: Text('Try again'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
+          return noConnectionView();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
@@ -56,6 +43,31 @@ class _AuthPageState extends State<AuthPage> {
           }
         }
       },
+    );
+  }
+
+  /// This is the view that is displayed when there is no connection in the device.
+  PageTemplate noConnectionView() {
+    return PageTemplate(
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/no-connection-white.png',
+                height: 75,
+              ),
+              SizedBox(height: kDefaultPadding * 2),
+              Text('No connection.'),
+              TextButton(
+                onPressed: () => setState(() {}),
+                child: Text('Try again'),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

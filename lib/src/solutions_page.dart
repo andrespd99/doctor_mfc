@@ -6,7 +6,7 @@ import 'package:doctor_mfc/models/solution.dart';
 import 'package:doctor_mfc/src/pdf_viewer_page.dart';
 import 'package:doctor_mfc/src/request_changes_page.dart';
 import 'package:doctor_mfc/src/start_point.dart';
-import 'package:doctor_mfc/src/systems_problems_list_page.dart';
+
 import 'package:doctor_mfc/widgets/custom_bullet.dart';
 import 'package:doctor_mfc/widgets/custom_solution_result_card.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
@@ -17,6 +17,12 @@ import 'package:flutter/widgets.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// This is the page that shows each solution linked to the given `problem`.
+///
+/// For each solution, it shows the solution's description and attachments.
+/// When no more solutions are available, or if one of them solves the issue,
+/// it shows a card that summarizes the result and gives the user shortcuts for
+/// final actions to take, like going back to main page or creating a request form.
 class SolutionsPage extends StatefulWidget {
   final Problem problem;
   static final routeName = 'solutionsPage';
@@ -328,7 +334,7 @@ class _SolutionsPageState extends State<SolutionsPage> {
             goBackToStartPoint();
             pushNewScreen(
               context,
-              screen: RequestChangePage(),
+              screen: UserRequestPage(),
               withNavBar: false,
             );
           },

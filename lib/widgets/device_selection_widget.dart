@@ -1,7 +1,8 @@
-import 'package:doctor_mfc/constants.dart';
-
 import 'package:flutter/material.dart';
 
+import 'package:doctor_mfc/constants.dart';
+
+/// A custom widget made to show custom list tiles for the device selection page.
 class DeviceSelectionWidget extends StatelessWidget {
   final String text;
   final Function() onTap;

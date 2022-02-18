@@ -3,6 +3,7 @@ import 'package:doctor_mfc/constants.dart';
 
 import 'package:doctor_mfc/models/search_result.dart';
 
+/// Search engine class that contains a list of functions to make search queries.
 class SearchEngine {
   static final Algolia _algolia = Algolia.init(
     applicationId: kApplicationId,

@@ -13,6 +13,8 @@ import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// Displays the list of systems that the user can select to navigate to in order
+/// to see all the problems related to it.
 class DeviceSelectionPage extends StatefulWidget {
   static final String routeName = 'deviceTypeSelection';
 
@@ -110,7 +112,7 @@ class _DeviceSelectionPageState extends State<DeviceSelectionPage> {
         child: Text('Request addition'),
         onPressed: () => pushNewScreen(
           context,
-          screen: RequestChangePage(),
+          screen: UserRequestPage(),
           withNavBar: false,
         ),
       ),

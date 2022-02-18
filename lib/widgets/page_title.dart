@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Page title widget.
 class PageTitle extends StatelessWidget {
   final String title;
   const PageTitle(this.title, {Key? key}) : super(key: key);

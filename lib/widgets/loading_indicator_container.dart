@@ -1,6 +1,7 @@
 import 'package:doctor_mfc/constants.dart';
 import 'package:flutter/material.dart';
 
+/// Custom loading indicator container for futures.
 class LoadingIndicatorContainer extends StatelessWidget {
   const LoadingIndicatorContainer({Key? key}) : super(key: key);
 

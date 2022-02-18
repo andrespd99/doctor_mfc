@@ -4,15 +4,20 @@ import 'package:doctor_mfc/models/system.dart';
 import 'package:doctor_mfc/services/database.dart';
 import 'package:doctor_mfc/src/device_documentation_page.dart';
 import 'package:doctor_mfc/src/solutions_page.dart';
-import 'package:doctor_mfc/widgets/custom_bullet.dart';
+
 import 'package:doctor_mfc/widgets/custom_list_tile.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// This is the page that will display all the problems linked to a specific `system`.
+///
+/// Also, if there's documentation available for this `system`, it will display a button
+/// that will take the user to the [DeviceDocumentationPage].
 class SystemsProblemsListPage extends StatefulWidget {
   static final routeName = 'systemsProblemsList';
 
+  /// The system which problems will be displayed in this page.
   final System system;
 
   SystemsProblemsListPage(this.system, {Key? key}) : super(key: key);

@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
+/// This is the user's profile page.
+///
+/// It shows the user's details and the option to request changes and sign out.
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
 
@@ -22,22 +25,22 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         userCard(),
         Spacer(),
-        TextButton(
-          onPressed: () {},
-          child: Text('Create ticket'),
-        ),
+        // TextButton(
+        //   onPressed: () {},
+        //   child: Text('Create ticket'),
+        // ),
         TextButton(
           child: Text('Request to add information'),
           onPressed: () => pushNewScreen(
             context,
-            screen: RequestChangePage(),
+            screen: UserRequestPage(),
             withNavBar: false,
           ),
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text('Help'),
-        ),
+        // TextButton(
+        //   onPressed: () {},
+        //   child: Text('Help'),
+        // ),
         TextButton(
           onPressed: () => onSignOutPressed(),
           child: Text('Sign out'),

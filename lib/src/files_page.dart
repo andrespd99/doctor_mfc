@@ -18,7 +18,11 @@ enum FileType {
   GUIDE,
 }
 
-/// FilesPage is a general Widget for both Documentation a Guides Page.
+/// This is the general Widget for both Documentation a Guides Page.
+///
+/// The `fileType` parameter has to be either `FileType.DOCUMENTATION` or `FileType.GUIDE`,
+/// depending on which page is being displayed, and will show the files with the
+/// given type.
 class FilesPage extends StatefulWidget {
   final FileType fileType;
 

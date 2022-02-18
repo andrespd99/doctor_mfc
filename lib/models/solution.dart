@@ -5,6 +5,7 @@ import 'package:doctor_mfc/models/step.dart';
 class Solution {
   final String id;
   final String description;
+
   final String? instructions;
 
   final List<Step>? steps;

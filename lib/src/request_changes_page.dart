@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_mfc/constants.dart';
 import 'package:doctor_mfc/models/entity_type.dart';
 import 'package:doctor_mfc/models/problem.dart';
-import 'package:doctor_mfc/models/request_form.dart';
+import 'package:doctor_mfc/models/user_request.dart';
 import 'package:doctor_mfc/models/request_type.dart';
 import 'package:doctor_mfc/models/solution.dart';
 import 'package:doctor_mfc/models/system.dart';
@@ -16,14 +16,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RequestChangePage extends StatefulWidget {
-  RequestChangePage({Key? key}) : super(key: key);
+/// This is the page for user requests where the user selects the type of request
+/// and entity they want to change, and shows the fields depending on the user's
+/// selection to create the request.
+class UserRequestPage extends StatefulWidget {
+  UserRequestPage({Key? key}) : super(key: key);
 
   @override
-  State<RequestChangePage> createState() => _RequestChangePageState();
+  State<UserRequestPage> createState() => _UserRequestPageState();
 }
 
-class _RequestChangePageState extends State<RequestChangePage> {
+class _UserRequestPageState extends State<UserRequestPage> {
   RequestType? selectedRequestType;
   EntityType? selectedEntityType;
 
@@ -640,8 +643,9 @@ class _RequestChangePageState extends State<RequestChangePage> {
       futureLoadingIndicator(
         context,
         Database().addRequest(
-          RequestForm(
+          UserRequest(
             userId: user!.uid,
+            userEmail: user.email!,
             requestType: selectedRequestType!,
             entityType: selectedEntityType!,
             requestTitle: requestTitleController.text,

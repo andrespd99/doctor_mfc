@@ -6,7 +6,7 @@ import 'package:doctor_mfc/services/mfc_auth_service.dart';
 import 'package:doctor_mfc/src/device_selection_page.dart';
 import 'package:doctor_mfc/src/landing_page.dart';
 import 'package:doctor_mfc/src/login_page.dart';
-import 'package:doctor_mfc/src/request_changes_page.dart';
+import 'package:doctor_mfc/src/pdf_viewer_page.dart';
 
 import 'package:doctor_mfc/src/solutions_page.dart';
 import 'package:doctor_mfc/src/start_point.dart';
@@ -43,6 +43,9 @@ class MyApp extends StatelessWidget {
           StartPointPage.routeName: (context) => StartPointPage(),
           DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
           DeviceSelectionPage.routeName: (context) => DeviceSelectionPage(),
+
+          // For search results, the widget returned to build the page will
+          // depend in the type of [SearchResult] that is passed to it.
           SearchResult.routeName: (context) {
             SearchResult result =
                 ModalRoute.of(context)!.settings.arguments as SearchResult;
@@ -50,20 +53,34 @@ class MyApp extends StatelessWidget {
             late Widget widget;
 
             if (result is ProblemSearchResult) {
+              // If seach result is a problem, show the problem page.
               widget = SolutionsPage(result.problem);
             } else if (result is DocumentationSearchResult) {
-              // TODO: Add documentation view.
-              // widget = DocumentationSearchResultPage(
-              //     problem: (result as DocumentationSearchResult).problem);
+              // If search result is a documentation, show the PDF viewer page.
+              widget = PDFViewerCachedFromUrl(
+                title: '${result.description}',
+                url: '${result.attachment.fileUrl}',
+              );
             } else if (result is GuideSearchResult) {
-              // TODO: Add guide view.
-              // widget = SolutionsPage(
-              //   problemDescription: result.problemDescription,
-              //   solutions: result.solutions,
-              // );
+              // If search result is a guide, show the PDF viewer page too.
+              widget = PDFViewerCachedFromUrl(
+                title: '${result.description}',
+                url: '${result.attachment.fileUrl}',
+              );
             } else {
+              // If search result is unknown, show an error page.
               widget = Container(
-                child: Center(child: Text('Unknown result')),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Unknown result'),
+                    TextButton(
+                      child: Text('Go back'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
               );
             }
             return widget;
@@ -73,6 +90,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
+  /// Custom Theme for the app.
   ThemeData theme() {
     return ThemeData(
       accentColor: kAccentColor,

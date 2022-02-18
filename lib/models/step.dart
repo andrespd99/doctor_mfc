@@ -1,3 +1,4 @@
+/// [Solution]'s steps, only for step-based solutions.
 class Step {
   String description;
   List<String> substeps;

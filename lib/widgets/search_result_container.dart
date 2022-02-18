@@ -3,8 +3,10 @@ import 'package:doctor_mfc/models/search_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// This is the container for the search results.
+///
+/// The search result's content will depend on the type of result.
 class SearchResultContainer extends StatefulWidget {
   final SearchResult result;
   const SearchResultContainer(

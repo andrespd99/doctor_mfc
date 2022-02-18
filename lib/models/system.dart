@@ -2,10 +2,17 @@ import 'package:doctor_mfc/models/problem.dart';
 
 class System {
   final String id;
+
+  /// System model.
   String description;
+
+  /// System brand.
   String brand;
 
+  /// Type of the system.
   final String type;
+
+  /// List of problems linked to this system.
   final List<Problem> problems;
 
   System({

@@ -7,6 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// Index navigation page that contains the tabs for the app.
+///
+/// This is the skeleton of the app, shows a navigation bar to navigate between
+/// the different pages and each having it's own navigation stack.
 class IndexNavigationPage extends StatefulWidget {
   static final routeName = 'indexNavigationPage';
   IndexNavigationPage({Key? key}) : super(key: key);

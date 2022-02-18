@@ -4,7 +4,6 @@ import 'package:doctor_mfc/models/search_result.dart';
 import 'package:doctor_mfc/services/search_engine.dart';
 import 'package:doctor_mfc/src/device_selection_page.dart';
 import 'package:doctor_mfc/src/request_changes_page.dart';
-import 'package:doctor_mfc/widgets/custom_solution_result_card.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
 import 'package:doctor_mfc/widgets/search_result_container.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,8 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
+/// This is the starting point for the troubleshooting process. This is where the user will
+/// search for his current problem, or make an advanced search by device.
 class StartPointPage extends StatefulWidget {
   static final routeName = 'startPoint';
 
@@ -181,7 +182,7 @@ class _StartPointPageState extends State<StartPointPage> {
                             searchBarController.close();
                             pushNewScreen(
                               context,
-                              screen: RequestChangePage(),
+                              screen: UserRequestPage(),
                               withNavBar: false,
                             );
                           },

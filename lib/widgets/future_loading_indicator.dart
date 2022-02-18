@@ -2,8 +2,18 @@ import 'package:doctor_mfc/widgets/loading_indicator_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// Builds a Loading Indicator Alert Dialog that stays until the future has completed.
-Future<T?> futureLoadingIndicator<T>(BuildContext context, Future<T> future) {
+/// Builds an undismissible Loading Indicator Alert Dialog that stays until the
+/// future has completed with or without an error.
+///
+/// The `future` parameter is the future that will be executed.
+///
+/// The optional `timeoutAt` parameter is the time that the future will have to
+/// complete before an onTimeoutError is thrown.
+Future<T?> futureLoadingIndicator<T>(
+  BuildContext context,
+  Future<T> future, {
+  Duration? timeoutAt,
+}) {
   return showDialog(
     context: context,
     barrierDismissible: false,
@@ -17,18 +27,18 @@ Future<T?> futureLoadingIndicator<T>(BuildContext context, Future<T> future) {
         // and show the error dialog.
         Navigator.pop(context);
 
-        onErrorDialog(
+        _onErrorDialog(
           context: context,
           errorMessage: 'An unexpected error has ocurred: $error',
           onTryAgainFuture: future,
           error: error,
           stackTrace: stackTrace,
         );
-      }).timeout(Duration(seconds: 15), onTimeout: () {
+      }).timeout(timeoutAt ?? Duration(seconds: 15), onTimeout: () {
         // If the future times out, dismiss the loading dialog
         // and show the error dialog with a Request Timeout message.
         Navigator.pop(context);
-        onErrorDialog(
+        _onErrorDialog(
           context: context,
           errorMessage: 'Request timeout',
           onTryAgainFuture: future,
@@ -39,7 +49,18 @@ Future<T?> futureLoadingIndicator<T>(BuildContext context, Future<T> future) {
   );
 }
 
-Future onErrorDialog({
+/// The error dialog that is shown when an error occurs. It can be dismissed.
+///
+/// The 'onErrorMessage' parameter is the error message that is shown to the
+/// user when this dialog is shown.
+///
+/// The `onTryAgainFuture` parameter is the future that will be executed when
+/// the user taps the "Try Again" button.
+///
+/// The `error` parameter is the error that was thrown.
+/// The `stackTrace` parameter is the stack trace of the error that was thrown.
+/// Both the `error` and `stackTrace` parameters are for debugging purpose.
+Future _onErrorDialog({
   required BuildContext context,
   String? errorMessage,
   Future? onTryAgainFuture,
