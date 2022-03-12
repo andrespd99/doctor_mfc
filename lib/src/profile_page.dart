@@ -3,6 +3,7 @@ import 'package:doctor_mfc/services/mfc_auth_service.dart';
 import 'package:doctor_mfc/src/request_changes_page.dart';
 import 'package:doctor_mfc/widgets/future_loading_indicator.dart';
 import 'package:doctor_mfc/widgets/page_template.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
         //   child: Text('Help'),
         // ),
         TextButton(
-          onPressed: () => onSignOutPressed(),
+          onPressed: () => onSignOutPressed(context),
           child: Text('Sign out'),
           style: TextButton.styleFrom(
             primary: Colors.red,
@@ -53,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> onSignOutPressed() {
+  Future<void> onSignOutPressed(BuildContext context) {
     return futureLoadingIndicator(
       context,
       Provider.of<MFCAuthService>(context, listen: false).signOut(),
@@ -63,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget userCard() {
     String email =
         Provider.of<MFCAuthService>(context, listen: false).user!.email!;
+
     return Column(
       children: [
         InkWell(

@@ -9,12 +9,13 @@ class MFCAuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// [FirebaseAuth]'s current user. Null if not signed in.
-  User? user = FirebaseAuth.instance.currentUser;
+  User? get user => FirebaseAuth.instance.currentUser;
 
   /// Stream of [FirebaseAuth]'s current user. Null if not signed in.
   ///
   /// Can be listened to for changes.
-  Stream<User?> userStream() => _auth.authStateChanges();
+  Stream<User?> userStream() => _auth.authStateChanges().asBroadcastStream();
+  Stream<User?> userChangesStream() => _auth.userChanges().asBroadcastStream();
 
   /// Sign in with `email` and `password`. Returns [String] if unsuccessful, with
   /// the description of the error.
@@ -24,7 +25,7 @@ class MFCAuthService {
   /// it will return an error.
   ///
   /// Then, it will sign in the user with the given credentials and will update any of the
-  /// [authStateChanges], [idTokenChanges] or [userChanges] stream listeners..
+  /// [authStateChanges], [idTokenChanges] or [userChangesStream] stream listeners..
   Future<String?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -53,7 +54,7 @@ class MFCAuthService {
 
   ///   Signs out the current user.
   ///
-  /// If successful, it also updates any [authStateChanges], [idTokenChanges] or [userChanges] stream listeners.
+  /// If successful, it also updates any [authStateChanges], [idTokenChanges] or [userChangesStream] stream listeners.
   Future<void> signOut() async {
     await _auth.signOut();
   }

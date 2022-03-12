@@ -49,10 +49,10 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ),
         Spacer(),
-        TextButton(
-          onPressed: () {},
-          child: Text('Contact support'),
-        ),
+        // TextButton(
+        //   onPressed: () {},
+        //   child: Text('Contact support'),
+        // ),
       ],
     );
   }

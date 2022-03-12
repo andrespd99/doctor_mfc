@@ -318,7 +318,7 @@ class _SolutionsPageState extends State<SolutionsPage> {
         ),
         SizedBox(height: kDefaultPadding),
         Text(
-          "But we can create a ticket with all the details for you",
+          "But you can create a ticket with all the details and we'll get back to you as soon as possible",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: kFontBlack,
@@ -420,7 +420,9 @@ class _SolutionsPageState extends State<SolutionsPage> {
       );
   }
 
-  void goBackToStartPoint() => Navigator.of(context).popUntil((route) {
-        return route.settings.name == StartPointPage.routeName;
-      });
+  void goBackToStartPoint() => Navigator.of(context).popUntil(
+        (route) {
+          return route.isFirst;
+        },
+      );
 }

@@ -35,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    late final auth = Provider.of<MFCAuthService>(context, listen: true);
+
     return PageTemplate(
       title: 'Log in',
       showAppBar: true,
@@ -48,19 +50,19 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: kDefaultPadding),
         if (hasError) errorMessageWidget(),
         SizedBox(height: kDefaultPadding),
-        !isLoading ? loginButton() : CustomProgressIndicator(),
+        !isLoading ? loginButton(auth) : CustomProgressIndicator(),
         Spacer(),
         poweredByTakeoffLogo(),
       ],
     );
   }
 
-  ElevatedButton loginButton() {
+  ElevatedButton loginButton(MFCAuthService auth) {
     return ElevatedButton(
       onPressed: () {
         setState(() => isLoading = true);
 
-        Provider.of<MFCAuthService>(context, listen: false)
+        auth
             .signInWithEmailAndPassword(
           emailController.text,
           passwordController.text,
