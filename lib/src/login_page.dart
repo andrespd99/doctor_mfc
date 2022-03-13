@@ -41,9 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       title: 'Log in',
       showAppBar: true,
       children: [
-        SizedBox(height: kDefaultPadding),
-        noAccountMessage(),
-        SizedBox(height: kDefaultPadding * 2),
+        // noAccountMessage(),
+        SizedBox(height: kDefaultPadding * 4),
         ...usernameInput(),
         SizedBox(height: kDefaultPadding * 1),
         ...passwordInput(),

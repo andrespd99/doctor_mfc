@@ -49,14 +49,11 @@ class _SolutionsPageState extends State<SolutionsPage> {
 
   bool finished = false;
   bool succeeded = false;
-  bool isStepBased = false;
+  bool get isStepBased =>
+      (selectedSolution.steps != null && selectedSolution.steps!.isNotEmpty);
 
   @override
   void initState() {
-    if (selectedSolution.steps != null && selectedSolution.steps!.isNotEmpty) {
-      isStepBased = true;
-    }
-
     super.initState();
   }
 
@@ -382,7 +379,7 @@ class _SolutionsPageState extends State<SolutionsPage> {
 
   void nextOption() {
     solutionIndex++;
-    if (solutionIndex + 1 >= problem.solutions.length) {
+    if (solutionIndex >= problem.solutions.length) {
       finished = true;
     }
     setState(() {});

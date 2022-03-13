@@ -89,7 +89,10 @@ class _FilesPageState extends State<FilesPage> {
                                 return fileCard(
                                   file: files[i],
                                   body: Text(
-                                      '${system.brand} ${system.description}'),
+                                    '${system.brand} ${system.description}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 );
                               } else
                                 return Container();
@@ -121,7 +124,7 @@ class _FilesPageState extends State<FilesPage> {
     return GestureDetector(
       onTap: () => openFile(file),
       child: Container(
-        height: 85.0,
+        height: 100.0,
         padding: EdgeInsets.all(kDefaultPadding * 0.90),
         decoration: BoxDecoration(
           color: kCardColor,
@@ -130,11 +133,15 @@ class _FilesPageState extends State<FilesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(file.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(color: kSecondaryLightColor)),
+            Text(
+              file.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  ?.copyWith(color: kSecondaryLightColor),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
             Spacer(),
             if (body != null) body,
           ],
